@@ -33,12 +33,25 @@ class Deactivate_Users {
 		add_filter( 'authenticate', array( $this, 'validate_active_user' ), 50, 3 );
 	}
 
+	/**
+	 * Include the cm_Meta_Box class for adding meta boxes if not already included
+	 */
 	function init() {
 		if ( ! class_exists( 'cmb_Meta_Box' ) ) {
 			require_once( 'lib/metabox/init.php' );
 		}
 	}
 
+	/**
+	 * Used to check that user is valid and active.
+	 * 
+	 * @param WP_User user object
+	 * @param string $username
+	 * @param string $password
+	 *
+	 * @return WP_User if user is valid and active
+	 * @return WP_Error on failure
+	 */
 	function validate_active_user( $user, $username, $password ) {
 		
 		// This is the case for the user failing authentication in another process. 
@@ -73,6 +86,15 @@ class Deactivate_Users {
 		}
 	}
 
+	/**
+	 * Uses the Custom Metaboxes and Fields project to create a checkbox
+	 * that is used to deactivate users.
+	 * Docs here: https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki
+	 *
+	 * @param array An array of meta boxes
+	 *
+	 *@return array An array of meta boxes
+	 */
 	function add_user_meta( $meta_boxes ) {
 		$prefix = '_deactivate_users_';
 
