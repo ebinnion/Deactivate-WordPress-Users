@@ -96,24 +96,29 @@ class Deactivate_Users {
 	 *@return array An array of meta boxes
 	 */
 	function add_user_meta( $meta_boxes ) {
-		$prefix = '_deactivate_users_';
+		$user = wp_get_current_user();
 
-		$meta_boxes[] = array(
-			'id'         => '_deactivate_user_meta',
-			'title'      => 'Deactivate User?',
-			'pages'      => array( 'user' ), // post type
-			'context'    => 'normal',
-			'priority'   => 'high',
-			'show_names' => true, // Show field names on the left
-			'fields'     => array(
-				array(
-				    'name' => 'Deactivate user?',
-				    'desc' => 'Check this box to deactivate the user.',
-				    'id'   => $prefix . 'deactivate',
-				    'type' => 'checkbox'
+		// Only add the checkbox if current user is an administrator
+		if( current_user_can( 'edit_users' ) ) {
+			$prefix = '_deactivate_users_';
+
+			$meta_boxes[] = array(
+				'id'         => '_deactivate_user_meta',
+				'title'      => 'Deactivate User?',
+				'pages'      => array( 'user' ), // post type
+				'context'    => 'normal',
+				'priority'   => 'high',
+				'show_names' => true, // Show field names on the left
+				'fields'     => array(
+					array(
+					    'name' => 'Deactivate user?',
+					    'desc' => 'Check this box to deactivate the user.',
+					    'id'   => $prefix . 'deactivate',
+					    'type' => 'checkbox'
+					),
 				),
-			),
-		);
+			);
+		}
 
 		return $meta_boxes;
 	}
