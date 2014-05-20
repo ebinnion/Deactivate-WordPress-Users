@@ -12,7 +12,7 @@
 class Deactivate_Users {
 
 	/**
-	 * Memeber data for ensuring singleton pattern
+	 * Member data for ensuring singleton pattern
 	 */
 	private static $instance = null;
 
@@ -34,7 +34,7 @@ class Deactivate_Users {
 	}
 
 	/**
-	 * Include the cm_Meta_Box class for adding meta boxes if not already included
+	 * Include the cmb_Meta_Box class for adding meta boxes if not already included
 	 */
 	function init() {
 		if ( ! class_exists( 'cmb_Meta_Box' ) ) {
