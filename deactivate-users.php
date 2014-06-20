@@ -3,7 +3,7 @@
  * Plugin Name: Deactivate WordPress Users
  * Plugin URI: http://crane-west.com
  * Description: Allows admins to deactivate a user as opposed to deleting a user. Works with web and XML-RPC based authentication.
- * Version: 0.1
+ * Version: 1.0
  * Author: Eric Binnion, Crane|West
  * Author URI: http://crane-west.com
  * License: GPLv2 or later
@@ -44,7 +44,7 @@ class Deactivate_Users {
 
 	/**
 	 * Used to check that user is valid and active.
-	 * 
+	 *
 	 * @param WP_User user object
 	 * @param string $username
 	 * @param string $password
@@ -53,15 +53,15 @@ class Deactivate_Users {
 	 * @return WP_Error on failure
 	 */
 	function validate_active_user( $user, $username, $password ) {
-		
-		// This is the case for the user failing authentication in another process. 
+
+		// This is the case for the user failing authentication in another process.
 		// In this case, let's just return the WP_Error object;
 		if ( is_wp_error( $user ) ) {
 			return $user;
 		} else {
 			if( ! isset( $user ) ) {
-				
-				// This is the case for the user not being authenticated, in which case, let's validate 
+
+				// This is the case for the user not being authenticated, in which case, let's validate
 				// the login cookie to get the user_id
 				$user_id = wp_validate_auth_cookie();
 
@@ -98,8 +98,11 @@ class Deactivate_Users {
 	function add_user_meta( $meta_boxes ) {
 		$user = wp_get_current_user();
 
-		// Only add the checkbox if current user is an administrator
-		if( current_user_can( 'edit_users' ) ) {
+		/*
+		 * Only add the checkbox if current user is an administrator, current profile is not current user's profile,
+		 * and the current profile is not an admin or the current user is user 1.
+		 */
+		if( current_user_can( 'edit_users' ) && isset( $_GET['user_id'] ) && ( ! user_can( $_GET['user_id'], 'edit_users' ) || 1 == $user->ID ) ) {
 			$prefix = '_deactivate_users_';
 
 			$meta_boxes[] = array(
