@@ -3,10 +3,11 @@
  * Plugin Name: Deactivate WordPress Users
  * Plugin URI: http://crane-west.com
  * Description: Allows admins to deactivate a user as opposed to deleting a user. Works with web and XML-RPC based authentication.
- * Version: 1.0
+ * Version: 1.1
  * Author: Eric Binnion, Crane|West
  * Author URI: http://crane-west.com
  * License: GPLv2 or later
+ * Text-Domain: deactivate-users
  */
 
 class Deactivate_Users {
@@ -68,7 +69,7 @@ class Deactivate_Users {
 				if ( $user_id ) {
 					$user = new WP_User( $user_id );
 				} else {
-					return new WP_Error( 'expired_session', __( 'Please log in again.' ) );
+					return new WP_Error( 'expired_session', esc_html__( 'Please log in again.' ) );
 				}
 			}
 
@@ -79,7 +80,7 @@ class Deactivate_Users {
 
 				// Clear any auth cookie if set.
 				wp_clear_auth_cookie();
-				return new WP_Error( 'deactivated_user', __( 'This user has been deactivated. Please contact the administrator.' ) );
+				return new WP_Error( 'deactivated_user', esc_html__( 'This user has been deactivated. Please contact the administrator.' ) );
 			} else {
 				return $user;
 			}
@@ -107,15 +108,15 @@ class Deactivate_Users {
 
 			$meta_boxes[] = array(
 				'id'         => '_deactivate_user_meta',
-				'title'      => 'Deactivate User?',
+				'title'      => esc_html__( 'Deactivate User?', 'deactivate-users' ),
 				'pages'      => array( 'user' ), // post type
 				'context'    => 'normal',
 				'priority'   => 'high',
 				'show_names' => true, // Show field names on the left
 				'fields'     => array(
 					array(
-					    'name' => 'Deactivate user?',
-					    'desc' => 'Check this box to deactivate the user.',
+					    'name' => esc_html__( 'Deactivate user?', 'deactivate-users' ),
+					    'desc' => esc_html__( 'Check this box to deactivate the user.', 'deactivate-users' ),
 					    'id'   => $prefix . 'deactivate',
 					    'type' => 'checkbox'
 					),
